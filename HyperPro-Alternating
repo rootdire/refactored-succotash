@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Hyper Pro"/>
+<title>Hyper Pro A/B Program</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#141414;color:#f0f0f0;font-family:-apple-system,'Helvetica Neue',sans-serif;padding-bottom:60px}
+button{-webkit-appearance:none;font-family:inherit;cursor:pointer;border:none;background:none}
+a{text-decoration:none}
+#header{background:#0f0f0f;border-bottom:2px solid #f97316;position:sticky;top:0;z-index:100}
+#header-inner{padding:14px 18px 0}
+.brand{font-size:11px;color:#f97316;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:3px}
+.htitle{font-size:20px;font-weight:800;color:#fff}
+#tabs{display:flex;margin-top:12px;border-top:1px solid #222}
+.tab{flex:1;background:none;border-bottom:3px solid transparent;padding:11px 4px;font-size:12px;color:#555;font-weight:400}
+.tab.act-calendar{color:#f97316;border-bottom-color:#f97316;font-weight:700}
+.tab.act-a{color:#f97316;border-bottom-color:#f97316;font-weight:700}
+.tab.act-b{color:#60a5fa;border-bottom-color:#60a5fa;font-weight:700}
+.tab.act-mobility{color:#34d399;border-bottom-color:#34d399;font-weight:700}
+#content{padding:14px 16px}
+.page{display:none}.page.active{display:block}
+.pots{background:#2a1515;border:1px solid #7f1d1d;border-left:4px solid #ef4444;border-radius:8px;padding:10px 14px;font-size:13px;color:#fca5a5;line-height:1.6;margin-bottom:16px}
+.stats3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px}
+.stats4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:16px}
+.sbox{background:#1c1c1c;border:1px solid #2a2a2a;border-radius:10px;padding:12px;text-align:center}
+.snum{font-size:24px;font-weight:900}
+.slbl{font-size:11px;color:#666;margin-top:3px}
+.week-lbl{font-size:12px;color:#555;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:16px}
+.cday{background:#1c1c1c;border:1px solid #2a2a2a;border-radius:8px;padding:10px 4px;text-align:center;cursor:pointer}
+.cday.rest{background:#111;border-color:#181818;opacity:.4;cursor:default}
+.cday.sel-a{background:#f97316;border-color:#f97316}
+.cday.sel-b{background:#60a5fa;border-color:#60a5fa}
+.cdow{font-size:10px;color:#666;text-transform:uppercase}
+.cday.sel-a .cdow,.cday.sel-b .cdow{color:rgba(255,255,255,.7)}
+.cletter{font-size:20px;font-weight:900;margin-top:3px}
+.cletter-a{color:#f97316}.cletter-b{color:#60a5fa}
+.cday.sel-a .cletter-a,.cday.sel-b .cletter-b{color:#fff}
+.csub{font-size:9px;color:#555;margin-top:2px}
+.cday.sel-a .csub,.cday.sel-b .csub{color:rgba(255,255,255,.6)}
+.ibox{background:#1c1c1c;border:1px solid #2a2a2a;border-radius:12px;padding:16px}
+.ibox-title{font-size:13px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px}
+.irow{display:flex;gap:12px;margin-bottom:12px}
+.ikey{font-size:12px;color:#f97316;font-weight:700;min-width:72px;flex-shrink:0;padding-top:1px}
+.ival{font-size:13px;color:#aaa;line-height:1.6}
+.wtitle{font-size:22px;font-weight:800;margin-bottom:3px}
+.wsub{font-size:13px;color:#888;margin-bottom:8px}
+.wnote{font-size:13px;color:#aaa;line-height:1.6;margin-bottom:16px}
+.exrow{background:#1c1c1c;border:1px solid #2a2a2a;border-radius:10px;margin-bottom:8px;overflow:hidden}
+.exrow.open{background:#242424}
+.exhead{display:flex;align-items:center;gap:10px;padding:14px;cursor:pointer}
+.exdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.exinfo{flex:1;min-width:0}
+.exname{font-size:14px;font-weight:700;color:#f0f0f0;margin-bottom:4px}
+.extags{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.tag{font-size:11px;padding:2px 7px;border-radius:4px;font-weight:700}
+.tdb{background:rgba(251,191,36,.13);color:#fbbf24;border:1px solid rgba(251,191,36,.33)}
+.thp{background:rgba(148,163,184,.08);color:#94a3b8;border:1px solid rgba(148,163,184,.2)}
+.tghd{background:rgba(74,222,128,.1);color:#4ade80;border:1px solid rgba(74,222,128,.25)}
+.exright{text-align:right;flex-shrink:0;margin-right:8px}
+.exnum{font-size:16px;font-weight:800;color:#f0f0f0}
+.exrest{font-size:11px;color:#888;margin-top:2px}
+.exchev{color:#555;font-size:12px;flex-shrink:0}
+.exbody{border-top:1px solid #252525;padding:12px 16px 16px 38px;display:none}
+.exnote{font-size:13px;color:#bbb;line-height:1.7}
+.vbtn{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;margin-top:12px;font-size:13px;font-weight:600;width:100%}
+.vbtn-hp{background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.33);color:#f97316;cursor:pointer}
+.vbtn-yt{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.33);color:#ef4444}
+.vwrap{margin-top:12px;border-radius:10px;overflow:hidden;background:#000;position:relative;display:none}
+.vclose{position:absolute;top:6px;right:6px;background:rgba(0,0,0,.75);color:#fff;font-size:12px;border-radius:4px;padding:3px 8px;cursor:pointer;z-index:2}
+video{display:block;width:100%;max-height:230px;background:#000}
+.mobrow{background:#1c1c1c;border:1px solid #2a2a2a;border-left:4px solid #34d399;border-radius:10px;padding:14px;margin-bottom:8px}
+.mobinner{display:flex;align-items:center;gap:10px}
+.mobname{font-size:15px;font-weight:700;color:#f0f0f0}
+.mobnote{font-size:13px;color:#aaa;margin-top:4px;line-height:1.5}
+.mobsets{font-size:14px;font-weight:800;color:#f0f0f0;flex-shrink:0}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:20px}
+.litem{display:flex;align-items:center;gap:6px}
+.lswatch{width:10px;height:10px;border-radius:2px}
+.llabel{font-size:11px;color:#555}
+</style>
+</head>
+<body>
+<div id="header">
+  <div id="header-inner">
+    <div class="brand">Hyper Pro + Dumbbells</div>
+    <div class="htitle">A/B Program</div>
+  </div>
+  <div id="tabs">
+    <button class="tab" data-tab="calendar" onclick="go('calendar')">Calendar</button>
+    <button class="tab" data-tab="a"        onclick="go('a')">Day A</button>
+    <button class="tab" data-tab="b"        onclick="go('b')">Day B</button>
+    <button class="tab" data-tab="mobility" onclick="go('mobility')">Mobility</button>
+  </div>
+</div>
+<div id="content">
+  <div class="pots"><strong>POTS NOTE: </strong>Pre-load electrolytes before every session. Rest days are non-negotiable. Rise slowly from any floor or lying movement.</div>
+  <div id="page-calendar" class="page">
+    <div style="font-size:20px;font-weight:800;margin-bottom:4px">Two-Week Schedule</div>
+    <div style="font-size:13px;color:#777;margin-bottom:16px">Tap a workout day to jump to that plan</div>
+    <div class="stats3">
+      <div class="sbox"><div class="snum" style="color:#f97316">7</div><div class="slbl">Sessions</div></div>
+      <div class="sbox"><div class="snum" style="color:#f97316">4</div><div class="slbl">Day A</div></div>
+      <div class="sbox"><div class="snum" style="color:#f97316">3</div><div class="slbl">Day B</div></div>
+    </div>
+    <div class="week-lbl">Week 1</div><div class="cal-grid" id="cw1"></div>
+    <div class="week-lbl">Week 2</div><div class="cal-grid" id="cw2"></div>
+    <div class="ibox">
+      <div class="ibox-title">How It Works</div>
+      <div class="irow"><div class="ikey">Pattern</div><div class="ival">Strict day on / day off. Every muscle group trained roughly every 4 days.</div></div>
+      <div class="irow"><div class="ikey">Rotation</div><div class="ival">Week 2 shifts by one day so you are not always training on the same days of the week.</div></div>
+      <div class="irow"><div class="ikey">Rest Days</div><div class="ival">Non-negotiable. This is where adaptation happens, especially important for your autonomic system.</div></div>
+      <div class="irow"><div class="ikey">Videos</div><div class="ival">HP exercises play inline. DB exercises open YouTube in a new tab or the YouTube app on iPhone.</div></div>
+      <div class="irow"><div class="ikey">Progress</div><div class="ival">When all sets feel easy at the top of the rep range, add the smallest available increment.</div></div>
+    </div>
+  </div>
+  <div id="page-a" class="page">
+    <div class="wtitle" style="color:#f97316">Lower + Pull</div>
+    <div class="wsub">Posterior Chain / Back / Biceps</div>
+    <div class="wnote">HP-heavy day. Start with the loaded hinge to prime the posterior chain, then move into Hyper Pro movements.</div>
+    <div class="stats4" id="st-a"></div>
+    <div id="ex-a"></div>
+  </div>
+  <div id="page-b" class="page">
+    <div class="wtitle" style="color:#60a5fa">Upper + Push + Core</div>
+    <div class="wsub">Chest / Shoulders / Triceps / Core</div>
+    <div class="wnote">DB-heavy day. Compound pressing first while fresh, shoulder accessories mid-session, core as a finisher.</div>
+    <div class="stats4" id="st-b"></div>
+    <div id="ex-b"></div>
+  </div>
+  <div id="page-mobility" class="page">
+    <div style="font-size:22px;font-weight:800;color:#34d399;margin-bottom:3px">Mobility + Recovery</div>
+    <div style="font-size:13px;color:#888;margin-bottom:16px">Add to end of any session, or use on rest days</div>
+    <div id="mob-list"></div>
+  </div>
+  <div class="legend">
+    <div class="litem"><div class="lswatch" style="background:#fbbf24"></div><span class="llabel">Dumbbell</span></div>
+    <div class="litem"><div class="lswatch" style="background:#94a3b8"></div><span class="llabel">Hyper Pro</span></div>
+    <div class="litem"><div class="lswatch" style="background:#4ade80"></div><span class="llabel">GHD</span></div>
+    <div class="litem"><div class="lswatch" style="background:#ef4444"></div><span class="llabel">POTS</span></div>
+  </div>
+</div>
+<script>
+var MC={Chest:"#fbbf24",Shoulders:"#22d3ee",Triceps:"#a78bfa",Back:"#4ade80","Upper Back":"#c084fc",Biceps:"#f472b6",Hamstrings:"#fde047",Glutes:"#fb923c","Low Back":"#f87171",Quads:"#86efac",Core:"#60a5fa",Calves:"#34d399",Hips:"#c4b5fd"};
+var VID={
+"DB Romanian Deadlift":{t:"yt",id:"aa57T45iFSE"},
+"45 Deg Back Extension":{t:"mp4",url:"https://cdn.shopify.com/videos/c/o/v/827f7013967a4d5fa43e48230fa8d4b9.mp4"},
+"Glute Ham Raise":{t:"mp4",url:"https://cdn.shopify.com/videos/c/o/v/9b298ea0aa194f3b9cedef6f9135806d.mp4"},
+"Nordic Curl":{t:"mp4",url:"https://cdn.shopify.com/videos/c/o/v/c575ea47e1824e4fbacb15caff1c4dd2.mp4"},
+"Hamstring Curl":{t:"mp4",url:"https://cdn.shopify.com/videos/c/o/v/fe33457442e84c1a813037c7def981b6.mp4"},
+"Reverse Hyper":{t:"mp4",url:"https://cdn.shopify.com/videos/c/o/v/46c81afc9be144dba96c64634dbae80b.mp4"},
+"DB Bent Over Row":{t:"yt",id:"6gvmcqr226U"},
+"Single Arm DB Row":{t:"yt",id:"pYcpY20QaE8"},
+"Face Pull":{t:"mp4",url:"https://cdn.shopify.com/videos/c/o/v/5f0ce7e57fcd4eb1933b388d9f854fd5.mp4"},
+"DB Bicep Curl":{t:"yt",id:"ykJmrZ5v0Oo"},
+"DB Hammer Curl":{t:"yt",id:"zC3nLlEvin4"},
+"DB Bench Press":{t:"yt",id:"5Y3VZsLb1Ys"},
+"Incline DB Press":{t:"yt",id:"hChjZQhX1Ls"},
+"DB Overhead Press":{t:"yt",id:"Did01dFR3Lk"},
+"DB Lateral Raise":{t:"yt",id:"JIhbYYA1Q90"},
+"Trap 3 Raise":{t:"mp4",url:"https://cdn.shopify.com/videos/c/o/v/83a18869d8f24737a98e0c733936a8ca.mp4"},
+"DB Skull Crusher":{t:"yt",id:"VP9Qp72zZ_c"},
+"External Rotator":{t:"mp4",url:"https://cdn.shopify.com/videos/c/o/v/a590f5cf7f10429e82d85572c4137f12.mp4"},
+"Push Up":{t:"mp4",url:"https://cdn.shopify.com/videos/c/o/v/c711fbc475544eaab0d9fb60abb47291.mp4"},
+"Leg Raise":{t:"mp4",url:"https://cdn.shopify.com/videos/c/o/v/4a3ea46d962a431ba0c26d0f1276ccaf.mp4"},
+"Russian Twist":{t:"mp4",url:"https://cdn.shopify.com/videos/c/o/v/54792b6ad51d45e280cd5c45913ce37b.mp4"},
+"Sit-Up":{t:"mp4",url:"https://cdn.shopify.com/videos/c/o/v/0e3a7b95c53a4e36adc081edc4de4fd1.mp4"}
+};
+var CAL=[
+{day:1,week:1,dow:"Mon",type:"A"},{day:2,week:1,dow:"Tue",type:"rest"},
+{day:3,week:1,dow:"Wed",type:"B"},{day:4,week:1,dow:"Thu",type:"rest"},
+{day:5,week:1,dow:"Fri",type:"A"},{day:6,week:1,dow:"Sat",type:"rest"},
+{day:7,week:1,dow:"Sun",type:"B"},{day:8,week:2,dow:"Mon",type:"rest"},
+{day:9,week:2,dow:"Tue",type:"A"},{day:10,week:2,dow:"Wed",type:"rest"},
+{day:11,week:2,dow:"Thu",type:"B"},{day:12,week:2,dow:"Fri",type:"rest"},
+{day:13,week:2,dow:"Sat",type:"A"},{day:14,week:2,dow:"Sun",type:"rest"}
+];
+var A=[
+{name:"DB Romanian Deadlift",eq:"DB",sets:3,reps:"10-12",rest:"75s",muscle:"Hamstrings",note:"Hip hinge, soft knees, flat back. DBs stay close to legs. Feel the stretch at the bottom."},
+{name:"45 Deg Back Extension",eq:"HP",sets:3,reps:"10-12",rest:"60s",muscle:"Low Back",note:"Control the descent. Squeeze glutes hard at the top. Can hold a DB at chest for extra load."},
+{name:"Glute Ham Raise",eq:"HP",sets:3,reps:"5-8",rest:"90s",muscle:"Glutes",note:"GHD attachment. Use hands to assist on the way up. Focus on hamstring-driven hip extension.",ghd:true},
+{name:"Nordic Curl",eq:"HP",sets:3,reps:"3-5 neg.",rest:"90s",muscle:"Hamstrings",note:"Negatives only -- slow 4-5 second descent, use hands to return. Do not attempt full reps yet."},
+{name:"Hamstring Curl",eq:"HP",sets:3,reps:"10-12",rest:"60s",muscle:"Hamstrings",note:"Constant tension throughout. Do not let hips rise. Slow eccentric (2-3 sec down)."},
+{name:"Reverse Hyper",eq:"HP",sets:3,reps:"12-15",rest:"60s",muscle:"Low Back",note:"GHD attachment gives full ROM. Light and controlled -- recovery and blood flow as much as strength.",ghd:true},
+{name:"DB Bent Over Row",eq:"DB",sets:3,reps:"8-10",rest:"90s",muscle:"Back",note:"Hip hinge, flat back, pull to hip not chest. Squeeze shoulder blade at the top."},
+{name:"Single Arm DB Row",eq:"DB",sets:3,reps:"10 each",rest:"75s",muscle:"Back",note:"Brace on bench or knee. Full range -- let the shoulder stretch at the bottom."},
+{name:"Face Pull",eq:"HP",sets:3,reps:"12-15",rest:"60s",muscle:"Upper Back",note:"Elbows high and wide, external rotate at the end. Critical for shoulder health."},
+{name:"DB Bicep Curl",eq:"DB",sets:3,reps:"10-12",rest:"60s",muscle:"Biceps",note:"Supinate as you curl. Full extension at the bottom. No swinging."},
+{name:"DB Hammer Curl",eq:"DB",sets:2,reps:"10-12",rest:"60s",muscle:"Biceps",note:"Neutral grip. Adds arm thickness via brachialis. Alternating arms for control."}
+];
+var B=[
+{name:"DB Bench Press",eq:"DB",sets:4,reps:"8-10",rest:"90s",muscle:"Chest",note:"Plant feet, neutral arch. Lower to mid-chest, drive full press. Primary mass builder."},
+{name:"Incline DB Press",eq:"DB",sets:3,reps:"10-12",rest:"75s",muscle:"Chest",note:"30-45 deg incline. Elbows at about 45 deg from torso. Prioritizes upper chest."},
+{name:"DB Overhead Press",eq:"DB",sets:3,reps:"10-12",rest:"75s",muscle:"Shoulders",note:"Seated for stability. Full lockout at the top. Push load on this one over time."},
+{name:"DB Lateral Raise",eq:"DB",sets:3,reps:"12-15",rest:"60s",muscle:"Shoulders",note:"Slight bend in elbows, lead with pinkies, keep torso still. Builds shoulder width."},
+{name:"Trap 3 Raise",eq:"HP",sets:3,reps:"12-15",rest:"60s",muscle:"Upper Back",note:"Light load, focus on scapular movement. Lower trap activation. Great posture work."},
+{name:"DB Skull Crusher",eq:"DB",sets:3,reps:"10-12",rest:"60s",muscle:"Triceps",note:"Flat or slight incline. Upper arms vertical, lower DBs toward temples. Control the descent."},
+{name:"External Rotator",eq:"HP",sets:2,reps:"15",rest:"45s",muscle:"Shoulders",note:"Rotator cuff maintenance. Light resistance, slow and deliberate."},
+{name:"Push Up",eq:"HP",sets:2,reps:"Max",rest:"60s",muscle:"Chest",note:"Use Hyper Pro incline to adjust difficulty. Finisher -- go to near failure."},
+{name:"Leg Raise",eq:"HP",sets:3,reps:"10-12",rest:"45s",muscle:"Core",note:"Slight bend in knees if needed. Controlled -- do not swing."},
+{name:"Russian Twist",eq:"HP",sets:3,reps:"10 each",rest:"45s",muscle:"Core",note:"Rotate from the core, not just the arms. Hold a light DB once bodyweight is easy."},
+{name:"Sit-Up",eq:"HP",sets:3,reps:"12-15",rest:"45s",muscle:"Core",note:"Decline setting for added challenge. Controlled movement throughout."}
+];
+var MOB=[
+{name:"Elephant Walk",reps:"10 slow steps",muscle:"Hamstrings",note:"Hamstring prep. Legs as straight as tolerable. Good start to Day A."},
+{name:"Couch Stretch",reps:"45s each side",muscle:"Quads",note:"Quad and hip flexor opener. Breathe into it. Good after Day B."},
+{name:"Incline Pigeon",reps:"30-45s each",muscle:"Hips",note:"Hip and glute opener. Best after Day A posterior chain work."},
+{name:"Calf Stretch",reps:"30s each side",muscle:"Calves",note:"Ankle mobility. Add to end of any session."}
+];
+var selDay=null;
+function go(tab){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.getElementById('page-'+tab).classList.add('active');
+  document.querySelectorAll('.tab').forEach(function(t){t.className='tab';});
+  document.querySelector('[data-tab="'+tab+'"]').classList.add('act-'+tab);
+  if(tab!=='calendar') selDay=null;
+  renderCal();
+}
+function renderCal(){renderWeek('cw1',1);renderWeek('cw2',2);}
+function renderWeek(id,w){
+  var c=document.getElementById(id);c.innerHTML='';
+  CAL.filter(function(d){return d.week===w;}).forEach(function(e){
+    var d=document.createElement('div');
+    var rest=e.type==='rest';
+    var sel=selDay===e.day;
+    d.className='cday'+(rest?' rest':'')+(sel?' sel-'+e.type.toLowerCase():'');
+    if(rest){
+      d.innerHTML='<div class="cdow">'+e.dow+'</div><div style="font-size:13px;color:#222;margin-top:6px">-</div>';
+    }else{
+      d.innerHTML='<div class="cdow">'+e.dow+'</div><div class="cletter cletter-'+e.type.toLowerCase()+'">'+e.type+'</div><div class="csub">'+(e.type==='A'?'Lower':'Upper')+'</div>';
+      (function(entry){d.onclick=function(){selDay=entry.day;go(entry.type.toLowerCase());};})(e);
+    }
+    c.appendChild(d);
+  });
+}
+function sb(v,l,c){return '<div class="sbox"><div class="snum" style="color:'+c+'">'+v+'</div><div class="slbl">'+l+'</div></div>';}
+function renderStats(exs,color,id){
+  var ts=exs.reduce(function(a,e){return a+e.sets;},0);
+  var db=exs.filter(function(e){return e.eq==='DB';}).length;
+  var hp=exs.filter(function(e){return e.eq==='HP';}).length;
+  document.getElementById(id).innerHTML=sb(exs.length,'Exercises',color)+sb(ts,'Total Sets',color)+sb(db,'DB',color)+sb(hp,'HP',color);
+}
+function renderExercises(exs,cid){
+  var c=document.getElementById(cid);c.innerHTML='';
+  exs.forEach(function(ex,i){
+    var uid=cid+'-'+i;
+    var v=VID[ex.name];
+    var dot=MC[ex.muscle]||'#888';
+    var tags='';
+    if(ex.eq==='DB') tags+='<span class="tag tdb">Dumbbell</span>';
+    if(ex.eq==='HP') tags+='<span class="tag thp">Hyper Pro</span>';
+    if(ex.ghd)       tags+='<span class="tag tghd">GHD</span>';
+    var vblock='';
+    if(v){
+      if(v.t==='mp4'){
+        vblock='<button class="vbtn vbtn-hp" onclick="playV(\''+uid+'\')">&#9654; Watch Demo (Freak Athlete)</button>'
+              +'<div class="vwrap" id="vw-'+uid+'">'
+              +'<video src="'+v.url+'" controls playsinline preload="metadata"></video>'
+              +'<button class="vclose" onclick="closeV(\''+uid+'\')">Close</button>'
+              +'</div>';
+      }else{
+        vblock='<a href="https://www.youtube.com/watch?v='+v.id+'" target="_blank" rel="noopener">'
+              +'<div class="vbtn vbtn-yt">&#9654; Watch on YouTube</div>'
+              +'</a>';
+      }
+    }
+    var row=document.createElement('div');
+    row.className='exrow';row.id='r-'+uid;
+    row.innerHTML='<div class="exhead" onclick="tog(\''+uid+'\')">'
+      +'<div class="exdot" style="background:'+dot+'"></div>'
+      +'<div class="exinfo"><div class="exname">'+ex.name+'</div><div class="extags">'+tags+'</div></div>'
+      +'<div class="exright"><div class="exnum">'+ex.sets+' x '+ex.reps+'</div><div class="exrest">Rest '+ex.rest+'</div></div>'
+      +'<div id="chv-'+uid+'" class="exchev">&#9660;</div>'
+      +'</div>'
+      +'<div class="exbody" id="bd-'+uid+'">'
+      +'<div class="exnote">'+ex.note+'</div>'
+      +vblock
+      +'</div>';
+    c.appendChild(row);
+  });
+}
+function tog(uid){
+  var bd=document.getElementById('bd-'+uid);
+  var ch=document.getElementById('chv-'+uid);
+  var r=document.getElementById('r-'+uid);
+  var open=bd.style.display==='none'||bd.style.display==='';
+  bd.style.display=open?'block':'none';
+  ch.innerHTML=open?'&#9650;':'&#9660;';
+  r.classList.toggle('open',open);
+}
+function playV(uid){
+  var vw=document.getElementById('vw-'+uid);
+  vw.style.display='block';
+  var vid=vw.querySelector('video');
+  if(vid){vid.load();vid.play().catch(function(){});}
+}
+function closeV(uid){
+  var vw=document.getElementById('vw-'+uid);
+  var vid=vw.querySelector('video');
+  if(vid){vid.pause();vid.currentTime=0;}
+  vw.style.display='none';
+}
+function renderMob(){
+  var c=document.getElementById('mob-list');c.innerHTML='';
+  MOB.forEach(function(ex){
+    var d=document.createElement('div');d.className='mobrow';
+    d.innerHTML='<div class="mobinner">'
+      +'<div class="exdot" style="background:'+(MC[ex.muscle]||'#888')+'"></div>'
+      +'<div style="flex:1"><div class="mobname">'+ex.name+'</div><div class="mobnote">'+ex.note+'</div></div>'
+      +'<div class="mobsets">2 x '+ex.reps+'</div>'
+      +'</div>';
+    c.appendChild(d);
+  });
+}
+renderStats(A,'#f97316','st-a');
+renderStats(B,'#60a5fa','st-b');
+renderExercises(A,'ex-a');
+renderExercises(B,'ex-b');
+renderMob();
+renderCal();
+go('calendar');
+</script>
+</body>
+</html>
